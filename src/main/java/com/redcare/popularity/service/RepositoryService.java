@@ -1,6 +1,6 @@
 package com.redcare.popularity.service;
 
-import com.redcare.popularity.dto.ScoredRepository;
+import com.redcare.popularity.dto.ScoredRepositoryDto;
 import com.redcare.popularity.http.client.github.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,16 +37,16 @@ public class RepositoryService {
     }
 
     @Cacheable(value = "repositories", key = "#createdAfter.toString() + '|' + #language + '|' + #page")
-    public List<ScoredRepository> getPopularScoredRepositories(LocalDate createdAfter, String language, int page) {
+    public List<ScoredRepositoryDto> getPopularScoredRepositories(LocalDate createdAfter, String language, int page) {
         return getRepos(createdAfter, language, page).items()
                 .stream()
                 .map(this::mapScoredRepository)
-                .sorted(Comparator.comparingDouble(ScoredRepository::popularityScore).reversed())
+                .sorted(Comparator.comparingDouble(ScoredRepositoryDto::popularityScore).reversed())
                 .toList();
     }
 
-    public ScoredRepository mapScoredRepository(GithubRepository repository) {
-        return ScoredRepository.builder()
+    public ScoredRepositoryDto mapScoredRepository(GithubRepositoryDto repository) {
+        return ScoredRepositoryDto.builder()
                 .name(repository.fullName())
                 .popularityScore(scoreCalculatorService.score(repository.stargazersCount(), repository.forksCount(), repository.pushedAt()))
                 .language(repository.language())

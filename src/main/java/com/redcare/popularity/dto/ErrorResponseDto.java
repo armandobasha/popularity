@@ -3,7 +3,7 @@ package com.redcare.popularity.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Error response containing error details")
-public record ErrorResponse(
+public record ErrorResponseDto(
         @Schema(description = "Error type or category", example = "Invalid request parameter")
         String error,
         @Schema(description = "Detailed error message", example = "Parameter 'createdAfter' has invalid value 'invalid-date'. Expected type: LocalDate.")

@@ -9,6 +9,6 @@ import java.util.List;
 public record SearchResponse(
         int totalCount,
         boolean incompleteResults,
-        List<GithubRepository> items
+        List<GithubRepositoryDto> items
 ) {
 }

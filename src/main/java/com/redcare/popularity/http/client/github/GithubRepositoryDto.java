@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.time.Instant;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record GithubRepository(
+public record GithubRepositoryDto(
         long id,
         String fullName,
         String language,

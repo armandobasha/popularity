@@ -1,7 +1,7 @@
 package com.redcare.popularity.controller;
 
-import com.redcare.popularity.dto.ErrorResponse;
-import com.redcare.popularity.dto.ScoredRepository;
+import com.redcare.popularity.dto.ErrorResponseDto;
+import com.redcare.popularity.dto.ScoredRepositoryDto;
 import com.redcare.popularity.service.RepositoryService;
 import io.micrometer.core.annotation.Timed;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,21 +40,21 @@ public class RepositoryController {
             @ApiResponse(
                     responseCode = "200",
                     description = "Successfully retrieved popular repositories",
-                    content = @Content(schema = @Schema(implementation = ScoredRepository.class))
+                    content = @Content(schema = @Schema(implementation = ScoredRepositoryDto.class))
             ),
             @ApiResponse(
                     responseCode = "400",
                     description = "Invalid request parameters",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))
             ),
             @ApiResponse(
                     responseCode = "500",
                     description = "Internal server error",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))
             )
     })
     @GetMapping("/popular")
-    public ResponseEntity<List<ScoredRepository>> popularRepositories(
+    public ResponseEntity<List<ScoredRepositoryDto>> popularRepositories(
             @Parameter(
                     description = "Filter repositories created after this date (ISO format: YYYY-MM-DD)",
                     required = true,
