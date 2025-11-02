@@ -2,6 +2,7 @@ package com.redcare.popularity.controller;
 
 import com.redcare.popularity.dto.ScoredRepository;
 import com.redcare.popularity.service.RepositoryService;
+import io.micrometer.core.annotation.Timed;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,13 +22,15 @@ import java.util.List;
 public class RepositoryController {
     private final RepositoryService repositoryService;
 
+    @Timed(value = "controller.repositories.get")
     @GetMapping("/popular")
     public ResponseEntity<List<ScoredRepository>> popularRepositories(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdAfter,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate createdAfter,
             @RequestParam String language
     ) {
         var result = repositoryService.getPopularScoredRepositories(createdAfter, language);
         log.info("Score: {}", result.size());
-        return ResponseEntity.ok(repositoryService.getPopularScoredRepositories(createdAfter, language));
+        return ResponseEntity.ok(result);
     }
 }

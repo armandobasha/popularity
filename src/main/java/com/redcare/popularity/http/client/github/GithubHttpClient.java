@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public interface GithubHttpClient {
     @GetMapping(
             value = "/search/repositories",
-            consumes = "application/vnd.github+json",
-            params = "q=created:>=2025-10-31")
+            consumes = "application/vnd.github+json")
     SearchResponse search(
             @SpringQueryMap RepositorySearchRequestParams params
     );

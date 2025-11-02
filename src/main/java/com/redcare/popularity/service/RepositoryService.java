@@ -1,24 +1,31 @@
 package com.redcare.popularity.service;
 
 import com.redcare.popularity.dto.ScoredRepository;
-import com.redcare.popularity.http.client.github.GithubHttpClient;
-import com.redcare.popularity.http.client.github.GithubRepository;
-import com.redcare.popularity.http.client.github.RepositorySearchRequestParams;
-import com.redcare.popularity.http.client.github.SearchResponse;
+import com.redcare.popularity.http.client.github.*;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class RepositoryService {
     private final GithubHttpClient githubClient;
     private final ScoreCalculatorService scoreCalculatorService;
 
+    @Cacheable(value = "repositories")
     public SearchResponse getRepos(LocalDate createdSince, String language) {
-        var query = "created:>=" + "2025-10-31";
+        var query = new SearchQueryBuilder()
+                .addCreatedDate(createdSince)
+                .addLanguage(language)
+                .build();
+
+        log.info("Query: {}", query);
+
         var requestParameters = new RepositorySearchRequestParams(query, "stars", "desc", 100 ,1);
         return githubClient.search(requestParameters);
     }
