@@ -11,6 +11,9 @@ public class SearchQueryBuilder {
     }
 
     public SearchQueryBuilder addLanguage(String language) {
+        if(language == null || language.isBlank()) {
+            return this;
+        }
         this.append("language:"+language);
         return this;
     }

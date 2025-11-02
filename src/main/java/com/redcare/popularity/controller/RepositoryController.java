@@ -64,13 +64,11 @@ public class RepositoryController {
             LocalDate createdAfter,
             @Parameter(
                     description = "Programming language to filter by",
-                    required = true,
                     example = "Java"
             )
-            @RequestParam String language,
+            @RequestParam(value = "language", required = false, defaultValue = "") String language,
             @Parameter(
                     description = "Page number for pagination (default: 1)",
-                    required = false,
                     example = "1"
             )
             @RequestParam(value = "page", required = false, defaultValue = "1") int page

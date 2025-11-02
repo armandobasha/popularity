@@ -1,8 +1,7 @@
-package com.redcare.popularity.integration;
+package com.redcare.popularity.service;
 
 import com.redcare.popularity.http.client.github.GithubHttpClient;
 import com.redcare.popularity.http.client.github.SearchResponse;
-import com.redcare.popularity.service.RepositoryService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootTest
-class RepoServiceCacheTest {
+class RepositoryServiceCacheTest {
   @Autowired
   RepositoryService service;
   @MockitoBean
@@ -27,7 +26,7 @@ class RepoServiceCacheTest {
     Mockito.when(githubClient.search(Mockito.any())).thenReturn(resp);
 
     service.getPopularScoredRepositories(date, "java", 1);
-    service.getPopularScoredRepositories(date, "java", 1); // should be a cache HIT
+    service.getPopularScoredRepositories(date, "java", 1);
 
     Mockito.verify(githubClient, Mockito.times(1)).search(Mockito.any());
   }
