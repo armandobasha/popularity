@@ -17,15 +17,6 @@ A Spring Boot application that calculates popularity scores for GitHub repositor
    java -version
    ```
 
-2. (Optional) Set GitHub API token in `src/main/resources/application.yaml`:
-   ```yaml
-   http:
-     github:
-       api:
-         token: "your-github-token-here"
-   ```
-   Note: The application will work without a token, but you'll have stricter rate limits.
-
 ### Running the Application
 
 **Using Maven Wrapper (Recommended)**
