@@ -31,3 +31,10 @@ http:
     api:
       url: https://api.github.com
       token: "${GITHUB_API_TOKEN:}"
+      retry:
+        maxAttempts: 3
+        period: 1000
+        maxPeriod: 5000
+      rateLimit:
+        limitForPeriod: 30
+        limitRefreshPeriod: 60

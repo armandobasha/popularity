@@ -48,6 +48,11 @@ public class RepositoryController {
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))
             ),
             @ApiResponse(
+                    responseCode = "429",
+                    description = "Rate limit exceeded - GitHub API rate limit has been exceeded. Please try again later.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))
+            ),
+            @ApiResponse(
                     responseCode = "500",
                     description = "Internal server error",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))
