@@ -26,3 +26,8 @@ logging:
     org.springframework.cache.interceptor: ERROR
     com.redcare.popularity.http.client.github.GithubHttpClient: ERROR
     feign.Logger: ERROR
+http:
+  github:
+    api:
+      url: https://api.github.com
+      token: ""
