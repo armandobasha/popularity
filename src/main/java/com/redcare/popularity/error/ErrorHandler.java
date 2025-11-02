@@ -1,5 +1,6 @@
 package com.redcare.popularity.error;
 
+import com.redcare.popularity.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -7,24 +8,25 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.Instant;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @RestControllerAdvice
 public class ErrorHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<Map<String, Object>> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+    public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
         String param = ex.getName();
-        String value = ex.getValue() != null ? ex.getValue().toString() : "null";
-        String expectedType = ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "unknown";
+        Object paramValue = ex.getValue();
+        String value = paramValue != null ? paramValue.toString() : "null";
+        Class<?> requiredType = ex.getRequiredType();
+        String expectedType = requiredType != null ? requiredType.getSimpleName() : "unknown";
 
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("error", "Invalid request parameter");
-        body.put("message", String.format("Parameter '%s' has invalid value '%s'. Expected type: %s.", param, value, expectedType));
-        body.put("status", HttpStatus.BAD_REQUEST.value());
-        body.put("timestamp", Instant.now().toString());
+        ErrorResponse errorResponse = new ErrorResponse(
+                "Invalid request parameter",
+                String.format("Parameter '%s' has invalid value '%s'. Expected type: %s.", param, value, expectedType),
+                HttpStatus.BAD_REQUEST.value(),
+                Instant.now().toString()
+        );
 
-        return ResponseEntity.badRequest().body(body);
+        return ResponseEntity.badRequest().body(errorResponse);
     }
 }

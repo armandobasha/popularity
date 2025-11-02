@@ -1,8 +1,16 @@
 package com.redcare.popularity.controller;
 
+import com.redcare.popularity.dto.ErrorResponse;
 import com.redcare.popularity.dto.ScoredRepository;
 import com.redcare.popularity.service.RepositoryService;
 import io.micrometer.core.annotation.Timed;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,15 +27,52 @@ import java.util.List;
 @RequestMapping("/api/repositories")
 @AllArgsConstructor
 @Slf4j
+@Tag(name = "Repositories", description = "API for retrieving popular GitHub repositories")
 public class RepositoryController {
     private final RepositoryService repositoryService;
 
     @Timed(value = "controller.repositories.get")
+    @Operation(
+            summary = "Get popular repositories",
+            description = "Retrieves a list of popular GitHub repositories filtered by creation date and programming language, sorted by popularity score"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved popular repositories",
+                    content = @Content(schema = @Schema(implementation = ScoredRepository.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid request parameters",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+            )
+    })
     @GetMapping("/popular")
     public ResponseEntity<List<ScoredRepository>> popularRepositories(
+            @Parameter(
+                    description = "Filter repositories created after this date (ISO format: YYYY-MM-DD)",
+                    required = true,
+                    example = "2024-01-01"
+            )
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate createdAfter,
+            @Parameter(
+                    description = "Programming language to filter by",
+                    required = true,
+                    example = "Java"
+            )
             @RequestParam String language,
+            @Parameter(
+                    description = "Page number for pagination (default: 1)",
+                    required = false,
+                    example = "1"
+            )
             @RequestParam(value = "page", required = false, defaultValue = "1") int page
     ) {
         var result = repositoryService.getPopularScoredRepositories(createdAfter, language, page);
