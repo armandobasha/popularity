@@ -26,6 +26,11 @@ logging:
     org.springframework.cache.interceptor: ERROR
     com.redcare.popularity.http.client.github.GithubHttpClient: ERROR
     feign.Logger: ERROR
+scoring:
+  weights:
+    star: 0.5
+    fork: 0.3
+    recency: 0.2
 http:
   github:
     api:

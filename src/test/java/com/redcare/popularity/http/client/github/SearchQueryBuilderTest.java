@@ -176,7 +176,7 @@ class SearchQueryBuilderTest {
                 .addCreatedDate(date2)
                 .build();
 
-        assertEquals("language:Java created:>=2024-01-01", result, 
+        assertEquals("created:>=2024-01-01 language:Java", result,
                 "Query should replace created date while keeping language");
     }
 

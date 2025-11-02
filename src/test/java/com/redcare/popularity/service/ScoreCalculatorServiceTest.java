@@ -1,5 +1,6 @@
 package com.redcare.popularity.service;
 
+import com.redcare.popularity.config.ScoringProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,8 @@ class ScoreCalculatorServiceTest {
 
     @BeforeEach
     void setUp() {
-        scoreCalculatorService = new ScoreCalculatorService();
+        ScoringProperties scoringProperties = new ScoringProperties();
+        scoreCalculatorService = new ScoreCalculatorService(scoringProperties);
     }
 
     @Test

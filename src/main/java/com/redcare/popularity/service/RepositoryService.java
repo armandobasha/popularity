@@ -31,7 +31,7 @@ public class RepositoryService {
                 .sort("stars")
                 .order("desc")
                 .per_page(100)
-                .page(1)
+                .page(page)
                 .build();
         return githubClient.search(requestParameters);
     }
