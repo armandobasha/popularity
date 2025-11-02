@@ -28,20 +28,13 @@ A Spring Boot application that calculates popularity scores for GitHub repositor
 
 ### Running the Application
 
-**Option 1: Using Maven Wrapper (Recommended)**
+**Using Maven Wrapper (Recommended)**
+
+If we do not have an api token then the rate limit from GitHub api will be 10 requests per minute
+
 ```bash
+export GITHUB_API_TOKEN=ghp_abc123xyz
 ./mvnw spring-boot:run
-```
-
-**Option 2: Using Maven directly**
-```bash
-mvn spring-boot:run
-```
-
-**Option 3: Build and run the JAR**
-```bash
-./mvnw clean package
-java -jar target/popularity-0.0.1-SNAPSHOT.jar
 ```
 
 The application will start on `http://localhost:8080` by default.

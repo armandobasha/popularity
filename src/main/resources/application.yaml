@@ -30,4 +30,4 @@ http:
   github:
     api:
       url: https://api.github.com
-      token: ""
+      token: "${GITHUB_API_TOKEN:}"
