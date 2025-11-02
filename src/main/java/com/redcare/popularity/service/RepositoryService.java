@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -17,21 +18,31 @@ public class RepositoryService {
     private final GithubHttpClient githubClient;
     private final ScoreCalculatorService scoreCalculatorService;
 
-    @Cacheable(value = "repositories")
-    public SearchResponse getRepos(LocalDate createdSince, String language) {
+    public SearchResponse getRepos(LocalDate createdAfter, String language, int page) {
         var query = new SearchQueryBuilder()
-                .addCreatedDate(createdSince)
+                .addCreatedDate(createdAfter)
                 .addLanguage(language)
                 .build();
 
-        log.info("Query: {}", query);
+        log.info("Query: {} Language: {} Page: {}", query, language, page);
 
-        var requestParameters = new RepositorySearchRequestParams(query, "stars", "desc", 100 ,1);
+        var requestParameters = RepositorySearchRequestParams.builder()
+                .q(query)
+                .sort("stars")
+                .order("desc")
+                .per_page(100)
+                .page(1)
+                .build();
         return githubClient.search(requestParameters);
     }
 
-    public List<ScoredRepository> getPopularScoredRepositories(LocalDate createdSince, String language) {
-        return getRepos(createdSince, language).items().stream().map(this::mapScoredRepository).toList();
+    @Cacheable(value = "repositories", key = "#createdAfter.toString() + '|' + #language + '|' + #page")
+    public List<ScoredRepository> getPopularScoredRepositories(LocalDate createdAfter, String language, int page) {
+        return getRepos(createdAfter, language, page).items()
+                .stream()
+                .map(this::mapScoredRepository)
+                .sorted(Comparator.comparingDouble(ScoredRepository::popularityScore).reversed())
+                .toList();
     }
 
     public ScoredRepository mapScoredRepository(GithubRepository repository) {

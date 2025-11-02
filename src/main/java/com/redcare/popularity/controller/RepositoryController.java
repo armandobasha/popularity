@@ -27,10 +27,11 @@ public class RepositoryController {
     public ResponseEntity<List<ScoredRepository>> popularRepositories(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate createdAfter,
-            @RequestParam String language
+            @RequestParam String language,
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page
     ) {
-        var result = repositoryService.getPopularScoredRepositories(createdAfter, language);
-        log.info("Score: {}", result.size());
+        var result = repositoryService.getPopularScoredRepositories(createdAfter, language, page);
+        log.info("Results: {}", result.size());
         return ResponseEntity.ok(result);
     }
 }

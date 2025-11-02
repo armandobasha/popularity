@@ -22,6 +22,7 @@ management:
         http.server.requests: true
 logging:
   level:
-    org.springframework.cache: DEBUG
-    com.redcare.popularity.http.client.github.GithubHttpClient: DEBUG
-    feign.Logger: DEBUG
+    org.springframework.cache: ERROR
+    org.springframework.cache.interceptor: ERROR
+    com.redcare.popularity.http.client.github.GithubHttpClient: ERROR
+    feign.Logger: ERROR
